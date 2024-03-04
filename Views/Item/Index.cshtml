@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Item>
+@{
+	ViewData["Title"] = "Show Items";
+}
+<a asp-action="Add" asp-controller="Item" class="btn btn-outline-primary">Add Item</a>
+<table class="table table-bordered table-hover">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<td>Actions</td>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.Name</td>
+				<td>
+					<a asp-action="Edit" asp-controller="Item" asp-route-id="@item.Id" class="btn btn-outline-primary">Edit</a>
+					<a asp-action="Delete" asp-controller="Item" onclick="return confirm('Are You Sure?')" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

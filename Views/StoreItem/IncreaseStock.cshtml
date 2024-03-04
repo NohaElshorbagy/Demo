@@ -1,0 +1,59 @@
+﻿@model ItemViewModel
+@{
+	SelectList StoreList = new SelectList(Model.stores, "Id", "Name");
+	SelectList ItemList = new SelectList(Model.items, "Id", "Name");
+}
+
+<!DOCTYPE html>
+
+<form method="post">
+	<label asp-for="StoreId"></label> <br />
+	<select asp-for="StoreId" class="form-select" asp-items="StoreList">
+		<option></option>
+	</select>
+	<label asp-for="ItemId"></label> <br />
+	<select asp-for="ItemId" class="form-select" asp-items="ItemList">
+		<option></option>
+	</select>
+	<div id="Quantity">
+	</div>
+	<div id="TotalQuantity">
+	</div>
+	@if (Model.Quantity != 0)
+	{
+		<div>
+			Quantity You Want To add :: @Model.Quantity
+		</div>
+	}
+
+	<input type="text" class="text-secondary" name="Quantity" />
+	<input type="submit" value="Save" class="btn btn-primary" id="saveButton" />
+</form>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+
+			$('#StoreId, #ItemId').on('change', function () {
+				var storeId = $('#StoreId').val();
+				var itemId = $('#ItemId').val();
+				console.log($('#StoreId').val());
+				console.log($('#ItemId').val());
+
+				if (storeId !== '' && itemId !== '') {
+					$.ajax({
+						url: '/StoreItem/GetQuantity?storeId=' + storeId + '&itemId=' + itemId,
+						method: 'GET',
+						success: function (result) {
+							console.log(result);
+							$('#TotalQuantity').text('Total Quantity: ' + result);
+						},
+						error: function () {
+							alert('something went wrong!');
+						}
+					});
+				}
+			});
+		});
+	</script>
+}
